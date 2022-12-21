@@ -1,7 +1,7 @@
 # re-start-scripts
 
-To install them in a React repo, in the folder bin
+To install them in a React repo
 ```
-git clone https://github.com/superpowerlabs/re-start-scripts bin
-rm -rf bin/.git
+git clone https://github.com/superpowerlabs/re-start-scripts
+rm -rf re-start-scripts/.git
 ```
