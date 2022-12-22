@@ -1,11 +1,9 @@
 # re-start-scripts
 
-To install it in a React repo in the folder bin
+To install or update it in a React repo in the folder bin:
+
 ```
-if [[ -d "bin" ]]; then mv bin bin-backup; fi
-git clone https://github.com/superpowerlabs/re-start-scripts bin
-rm -rf bin/.git
-rm bin/README.md
-mv bin-backup/* bin
-rm -rf bin-backup
+curl -o- https://raw.githubusercontent.com/superpowerlabs/re-start-scripts/main/install.sh | bash
 ```
+
+Later, edit `bin/extra-dependencies.sh` to adapt it to your app, if needed.
