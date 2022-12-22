@@ -69,6 +69,7 @@ COMMIT=`git rev-parse HEAD`
 echo "--- Pulling, installing and building..."
 git pull
 pnpm i
+pnpm test
 pnpm build
 
 echo "--- Syncing build folders..."

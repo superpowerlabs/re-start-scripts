@@ -18,7 +18,7 @@ Finally, add in the scripts sectionn of package.json
 ```
 and also the tests like this
 ```
-"test": "npm run test:server; npm run test:client -- --watchAll=false",
+"test": "npm run test:server && npm run test:client -- --watchAll=false",
 "test:server": "mocha --exit",
 "test:client": "react-scripts test",
 ```

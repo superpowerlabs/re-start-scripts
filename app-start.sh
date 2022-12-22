@@ -74,6 +74,7 @@ fi
 
 echo "--- Installing and building..."
 pnpm i
+pnpm test
 pnpm build
 
 echo "--- Syncing build folders..."
