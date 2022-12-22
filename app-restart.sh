@@ -19,7 +19,7 @@ Examples:
 "
 }
 
-while getopts "a:b:p:h:" opt; do
+while getopts "a:b:p:h:B:" opt; do
   case $opt in
   a)
     APP=$OPTARG
