@@ -34,3 +34,14 @@ window.shallow = shallow;
 ' > ./testConfig.js
 
 fi
+
+if [[ ! -f "./jest.config.js" ]]; then
+  echo 'jest.config.js not found. Creating a new one.'
+
+echo 'module.exports = {
+  testPathIgnorePatterns: ["<rootDir>/node_modules", "<rootDir>/test"],
+  globals: {},
+  testEnvironment: "jsdom",
+};' > ./jest.config.js
+
+fi
