@@ -15,6 +15,7 @@ if [[ ! -f "bin/pre-commit.sh" ]]; then
 
 npx pretty-quick --staged && npm test
 " >> bin/pre-commit.sh
+  chmod +x bin/pre-commit.sh
 fi
 
 if [[ ! -f ".husky/pre-commit" || `cat .husky/pre-commit | grep "bin/pre-commit.sh"` == "" ]]; then
