@@ -11,6 +11,7 @@ Accepted options:               Optional:   Defaults:
     -b [build folder]           yes         build0
     -h [healthcheck endpoint]   yes         healthcheck
     -c [total used cores]       yes         max
+    -B [building folder]        yes         build
 
 Examples:
 
@@ -19,12 +20,15 @@ Examples:
 "
 }
 
-while getopts "a:b:p:h:c:" opt; do
+while getopts "a:b:p:h:c:B:" opt; do
   case $opt in
   a)
     APP=$OPTARG
     ;;
   b)
+    BUILD0=$OPTARG
+    ;;
+  B)
     BUILD=$OPTARG
     ;;
   p)
@@ -52,8 +56,12 @@ if [[ "$HEALTHCHECK" == "" ]]; then
   HEALTHCHECK=healthcheck
 fi
 
+if [[ "$BUILD0" == "" ]]; then
+  BUILD0=build0
+fi
+
 if [[ "$BUILD" == "" ]]; then
-  BUILD=build0
+  BUILD=build
 fi
 
 if [[ "$CORES" == "" ]]; then
@@ -69,7 +77,7 @@ pnpm i
 pnpm build
 
 echo "--- Syncing build folders..."
-rsync -a build/ $BUILD --delete
+rsync -a $BUILD/ $BUILD0 --delete
 
 pm2 start index.js -i $CORES --name $APP
 pm2 save
