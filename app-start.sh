@@ -12,7 +12,6 @@ Accepted options:               Optional:   Defaults:
     -h [healthcheck endpoint]   yes         healthcheck
     -c [total used cores]       yes         max
     -B [building folder]        yes         build
-    -C
 
 Examples:
 
@@ -21,7 +20,7 @@ Examples:
 "
 }
 
-while getopts "a:b:p:h:c:B:C:" opt; do
+while getopts "a:b:p:h:c:B:" opt; do
   case $opt in
   a)
     APP=$OPTARG
@@ -41,17 +40,12 @@ while getopts "a:b:p:h:c:B:C:" opt; do
   c)
     CORES=$OPTARG
     ;;
-  C)
-    ECHO=$OPTARG
-    ;;
   \?)
     help
     exit 1
     ;;
   esac
 done
-
-echo $ECHO
 
 if [[ "$APP" == "" || "$PORT" == "" ]]; then
   help
