@@ -5,6 +5,7 @@ if [[ ! -d "node_modules/@wojtekmaj" ]]; then
   pnpm i -D @wojtekmaj/enzyme-adapter-react-17 \
     @testing-library/jest-dom \
     enzyme \
+    jest \
     react-test-renderer \
     regenerator-runtime
 fi
