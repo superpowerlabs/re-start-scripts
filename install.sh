@@ -4,6 +4,12 @@ BK=
 if [[ -d "bin" ]]; then
   BK=1
   echo "Backing up existing sub folder bin..."
+  if [[ -f "bin/app-restart.sh" ]]; then
+    rm bin/app-restart.sh
+    rm bin/app-start.sh
+    rm bin/post-install.sh
+    rm bin/testing-dependencies.sh
+  fi
   mv bin bin-backup
 fi
 
