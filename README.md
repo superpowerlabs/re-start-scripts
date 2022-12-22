@@ -1,5 +1,6 @@
 # re-start-scripts
 
+A collection of scripts that we use in most of our web apps.
 
 ## Usage
 
