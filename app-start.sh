@@ -74,7 +74,14 @@ fi
 
 echo "--- Installing and building..."
 pnpm i
+
 pnpm test
+if [[ "$?" == "1" ]]
+then
+  echo "--- Test failed. Exiting..."
+  exit 1
+fi
+
 pnpm build
 
 echo "--- Syncing build folders..."
