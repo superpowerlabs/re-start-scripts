@@ -102,4 +102,5 @@ then
 "
 else
   echo "--- All seems working fine."
+  echo "--- Listening on http://localhost:$PORT"
 fi

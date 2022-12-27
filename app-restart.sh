@@ -101,6 +101,7 @@ $COMMIT
   pm2 restart $APP
 else
   echo "--- All seems working fine."
+  echo "--- Listening on http://localhost:$PORT"
 fi
 
 rm -rf ../build-backup
