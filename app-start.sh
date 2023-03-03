@@ -82,7 +82,7 @@ then
   exit 1
 fi
 
-pnpm build
+nice -n 19 pnpm build
 
 echo "--- Syncing build folders..."
 rsync -a $BUILD/ $BUILD0 --delete
