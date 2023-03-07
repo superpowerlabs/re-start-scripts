@@ -20,13 +20,18 @@ Examples:
 "
 }
 
+cyan_echo() {
+  local string="$1"
+  echo -e "\033[36m$string\033[0m"
+}
+
 while getopts "a:b:p:h:c:B:" opt; do
   case $opt in
   a)
     APP=$OPTARG
     ;;
   b)
-    BUILD0=$OPTARG
+    BUNDLE=$OPTARG
     ;;
   B)
     BUILD=$OPTARG
@@ -56,8 +61,8 @@ if [[ "$HEALTHCHECK" == "" ]]; then
   HEALTHCHECK=healthcheck
 fi
 
-if [[ "$BUILD0" == "" ]]; then
-  BUILD0=build0
+if [[ "$BUNDLE" == "" ]]; then
+  BUNDLE=build0
 fi
 
 if [[ "$BUILD" == "" ]]; then
@@ -68,20 +73,22 @@ if [[ "$CORES" == "" ]]; then
   CORES=max
 fi
 
-echo "--- Installing and building..."
+cyan_echo "--- Installing and building..."
 pnpm i
 
 pnpm test
 if [[ "$?" == "1" ]]
 then
-  echo "--- Test failed. Exiting..."
+  cyan_echo "--- Test failed. Exiting..."
   exit 1
 fi
 
 nice -n 19 pnpm build
 
-echo "--- Syncing build folders..."
-rsync -a $BUILD/ $BUILD0 --delete
+if [[ $BUNDLE != $BUILD ]]; then
+  cyan_echo "--- Syncing build folders..."
+  rsync -a $BUILD/ $BUNDLE --delete
+fi
 
 if [[ `pm2 list | grep $APP | grep online` ]]; then
   pm2 delete $APP
@@ -92,15 +99,15 @@ pm2 save
 
 sleep 1
 
-echo "--- Checking if everything works..."
+cyan_echo "--- Checking if everything works..."
 OK=`curl http://localhost:$PORT/$HEALTHCHECK`
 
 if [[ "$OK" != "ok" ]]
 then
-  echo "
+  cyan_echo "
 --- APP NOT WORKING PROPERLY!!!
 "
 else
-  echo "--- All seems working fine."
-  echo "--- Listening on http://localhost:$PORT"
+  cyan_echo "--- All seems working fine."
+  cyan_echo "--- Listening on http://localhost:$PORT"
 fi

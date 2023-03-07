@@ -19,13 +19,18 @@ Examples:
 "
 }
 
+cyan_echo() {
+  local string="$1"
+  echo -e "\033[36m$string\033[0m"
+}
+
 while getopts "a:b:p:h:B:" opt; do
   case $opt in
   a)
     APP=$OPTARG
     ;;
   b)
-    BUILD0=$OPTARG
+    BUNDLE=$OPTARG
     ;;
   B)
     BUILD=$OPTARG
@@ -52,56 +57,58 @@ if [[ "$HEALTHCHECK" == "" ]]; then
   HEALTHCHECK=healthcheck
 fi
 
-if [[ "$BUILD0" == "" ]]; then
-  BUILD0=build0
+if [[ "$BUNDLE" == "" ]]; then
+  BUNDLE=build0
 fi
 
 if [[ "$BUILD" == "" ]]; then
   BUILD=build
 fi
 
-echo "--- Backing up the current build..."
-cp -r $BUILD0 ../build-backup
+cyan_echo "--- Backing up the current build..."
+cp -r $BUNDLE ../build-backup
 
-echo "--- Getting current HEAD from git..."
+cyan_echo "--- Getting current HEAD from git..."
 COMMIT=`git rev-parse HEAD`
 
-echo "--- Pulling, installing and building..."
+cyan_echo "--- Pulling, installing and building..."
 git pull
 pnpm i
 
 pnpm test
 if [[ "$?" == "1" ]]
 then
-  echo "--- Test failed. Exiting..."
+  cyan_echo "--- Test failed. Exiting..."
   exit 1
 fi
 
 nice -n 19 pnpm build
 
-echo "--- Syncing build folders..."
-rsync -a $BUILD/ $BUILD0 --delete
+if [[ $BUNDLE != $BUILD ]]; then
+  cyan_echo "--- Syncing build folders..."
+  rsync -a $BUILD/ $BUNDLE --delete
+fi
 
 pm2 restart $APP
 
 sleep 1
 
-echo "--- Checking if everything works..."
+cyan_echo "--- Checking if everything works..."
 OK=`curl http://localhost:$PORT/$HEALTHCHECK`
 
 if [[ "$OK" != "ok" ]]
 then
-  echo "
+  cyan_echo "
 --- App not working properly. Reverting to
 $COMMIT
 "
   git reset --hard $COMMIT
   pnpm i
-  rsync -a ../build-backup/ $BUILD0 --delete
+  rsync -a ../build-backup/ $BUNDLE --delete
   pm2 restart $APP
 else
-  echo "--- All seems working fine."
-  echo "--- Listening on http://localhost:$PORT"
+  cyan_echo "--- All seems working fine."
+  cyan_echo "--- Listening on http://localhost:$PORT"
 fi
 
 rm -rf ../build-backup
