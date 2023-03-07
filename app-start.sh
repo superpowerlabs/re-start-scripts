@@ -68,10 +68,6 @@ if [[ "$CORES" == "" ]]; then
   CORES=max
 fi
 
-if [[ `pm2 list | grep $APP | grep online` ]]; then
-  pm2 delete $APP
-fi
-
 echo "--- Installing and building..."
 pnpm i
 
@@ -86,6 +82,10 @@ nice -n 19 pnpm build
 
 echo "--- Syncing build folders..."
 rsync -a $BUILD/ $BUILD0 --delete
+
+if [[ `pm2 list | grep $APP | grep online` ]]; then
+  pm2 delete $APP
+fi
 
 pm2 start index.js -i $CORES --name $APP
 pm2 save
