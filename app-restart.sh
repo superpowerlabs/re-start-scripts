@@ -75,12 +75,15 @@ cp -r $BUNDLE ../build-backup
 cyan_echo "--- Getting current HEAD from git..."
 COMMIT=`git rev-parse HEAD`
 
-cyan_echo "--- Pulling, installing and building..."
 if [[ "$DONT_PULL" == "" ]]; then
+  cyan_echo "--- Pulling..."
   git pull
 fi
+
+cyan_echo "--- Updating dependencies..."
 pnpm i
 
+cyan_echo "--- Testing..."
 pnpm test
 if [[ "$?" == "1" ]]
 then
@@ -88,13 +91,15 @@ then
   exit 1
 fi
 
+cyan_echo "--- Building nicely..."
 nice -n 19 pnpm build
 
 if [[ $BUNDLE != $BUILD ]]; then
-  cyan_echo "--- Syncing build folders..."
+  cyan_echo "--- Syncing $BUILD >> $BUNDLE..."
   rsync -a $BUILD/ $BUNDLE --delete
 fi
 
+cyan_echo "--- Restarting app..."
 pm2 restart $APP
 
 sleep 1
