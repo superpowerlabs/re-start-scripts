@@ -11,6 +11,7 @@ Accepted options:               Optional:   Defaults:
     -b [build folder]           yes         build0
     -h [healthcheck endpoint]   yes         healthcheck
     -B [building folder]        yes         build
+    -d [don't pull]             yes         false
 
 Examples:
 
@@ -40,6 +41,9 @@ while getopts "a:b:p:h:B:" opt; do
     ;;
   h)
     HEALTHCHECK=$OPTARG
+    ;;
+  d)
+    DONT_PULL=$OPTARG
     ;;
   \?)
     help
@@ -72,7 +76,9 @@ cyan_echo "--- Getting current HEAD from git..."
 COMMIT=`git rev-parse HEAD`
 
 cyan_echo "--- Pulling, installing and building..."
-git pull
+if [[ "$DONT_PULL" == "" ]]; then
+  git pull
+fi
 pnpm i
 
 pnpm test
