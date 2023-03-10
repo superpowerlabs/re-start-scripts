@@ -75,7 +75,7 @@ cp -r $BUNDLE ../build-backup
 cyan_echo "--- Getting current HEAD from git..."
 COMMIT=`git rev-parse HEAD`
 
-if [[ "$DONT_PULL" == "true" ]]; then
+if [[ "$DONT_PULL" != "true" ]]; then
   cyan_echo "--- Pulling..."
   git pull
 fi
