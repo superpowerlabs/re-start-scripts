@@ -25,7 +25,7 @@ cyan_echo() {
   echo -e "\033[36m$string\033[0m"
 }
 
-while getopts "a:b:p:h:B:" opt; do
+while getopts "a:b:p:h:B:d:" opt; do
   case $opt in
   a)
     APP=$OPTARG
